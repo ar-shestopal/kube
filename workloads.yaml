@@ -1,7 +1,7 @@
 apiVersion: apps/v1
-kind: ReplicaSet
+kind: Deployment
 metadata:
-  # Unique key of the ReplicaSet instance
+  # Unique key of the Deployment instance
   name: fleetman-webapp
 spec:
   # 1 Pods should exist at all times.
@@ -11,7 +11,7 @@ spec:
       app: webapp
   template:
     metadata:
-      name: fleetman-webapp
+      name: webapp
       labels:
         app: webapp
     spec:
@@ -20,9 +20,9 @@ spec:
           image: richardchesterwood/k8s-fleetman-webapp-angular:release0-5
 ---
 apiVersion: apps/v1
-kind: ReplicaSet
+kind: Deployment
 metadata:
-  # Unique key of the ReplicaSet instance
+  # Unique key of the Deployment instance
   name: fleetman-queue
 spec:
   # 1 Pods should exist at all times.
@@ -32,10 +32,34 @@ spec:
       app: queue
   template:
     metadata:
-      name: fleetman-queue
+      name: queue
       labels:
         app: queue
     spec:
       containers:
         - name: queue
           image: richardchesterwood/k8s-fleetman-queue:release1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Unique key of the Deployment instance
+  name: position-simulator
+spec:
+  # 1 Pods should exist at all times.
+  replicas: 1
+  selector:
+    matchLabels:
+      app: position-simulator
+  template:
+    metadata:
+      name: position-simulator
+      labels:
+        app: position-simulator
+    spec:
+      containers:
+        - name: position-simulator
+          image: richardchesterwood/k8s-fleetman-position-simulator:release1
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: production-microservice
