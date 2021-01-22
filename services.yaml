@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   # Unique key of the Service instance
-  name: fleetman-webapp
+  name: webapp
 spec:
   ports:
     # Accept traffic sent to port 80
@@ -20,13 +20,15 @@ kind: Service
 apiVersion: v1
 metadata:
   # Unique key of the Service instance
-  name: fleetman-queue
+  name: queue
 spec:
   ports:
     # Accept traffic sent to port 80
     - name: http
       port: 8161
       nodePort: 30010
+    - name: endpoint
+      port: 61616
   selector:
     app: queue
 
